@@ -28,13 +28,20 @@ import org.sam.christmasdrawing.util.RandomPerm;
  * 
  * The format of the input file is:
  *
- * person name disallowed 1 disallowed 2 ... disallowed n
+ * person_name_1
+ * disallowed_1
+ * disallowed_2
+ * ...
+ * disallowed_n
  *
- * person name disallowed 1 ...
+ * person_name_2
+ * disallowed_1
+ * ...
  *
  * The format of the output file is:
  *
- * giver 1 -> receiver 1 giver 2 -> receiver 2 ...
+ * giver 1 -> receiver 1
+ * giver 2 -> receiver 2 ...
  *
  * @author smakked
  */
