@@ -1,0 +1,25 @@
+package org.sam.christmasdrawing.util;
+
+import java.util.Random;
+
+public class RandomPerm {
+	public static int[] getRandomPerm(int n) {
+		Random rand = new Random(System.currentTimeMillis());
+		
+		//generate an array of size n with 1..n
+		int[] returnArray = new int[n];
+		for(int i = 0; i < n; i++) {
+			returnArray[i] = i;
+		}
+		
+		for(int i = 0; i < n; i++) {
+			//swap each element of the array out with some other (random) element
+			int toSwap = rand.nextInt(n);
+			int placeHolder = returnArray[toSwap];
+			returnArray[toSwap] = returnArray[i];
+			returnArray[i] = placeHolder;
+		}
+		
+		return returnArray;
+	}
+}
