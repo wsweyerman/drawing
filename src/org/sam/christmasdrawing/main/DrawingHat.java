@@ -103,12 +103,12 @@ public class DrawingHat {
       // disallowed or have a cycle of length two
       if (i == perm[perm[i]]) {
         System.out.println("Not allowing circular (" + i + "," + perm[i] + "): " 
-            + family[i].getName() + " <-> " + family[perm[i]].getName());
+            + family[i] + " <-> " + family[perm[i]]);
         return false;
       }
-      if (!family[i].isAllowed(family[perm[i]].getName())) {
-        System.out.println("Not allowing (" + i + "," + perm[i] + "): " + family[i].getName()
-                + " -> " + family[perm[i]].getName());
+      if (!family[i].isAllowed(family[perm[i]])) {
+        System.out.println("Not allowing (" + i + "," + perm[i] + "): " + family[i]
+                + " -> " + family[perm[i]]);
         return false;
       }
     }
@@ -139,8 +139,8 @@ public class DrawingHat {
               + perm.size());
 
     for (int i = 0; i < n; i++) {
-      String from = family[i].getName();
-      String to = family[perm.get(i)].getName();
+      Person from = family[i];
+      Person to = family[perm.get(i)];
       System.out.println(from + " -> " + to);
       outFile.write(from + " -> " + to + "\n");
     }
