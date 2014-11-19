@@ -16,12 +16,13 @@ public class RandomPerm {
       returnArray[i] = i;
     }
 
-    for (int i = 0; i < n; i++) {
-      //swap each element of the array out with some other (random) element
-      int toSwap = rand.nextInt(n);
+    for (int i = n; i > 1; i--) {
+      // Each iteration, randomly pick one of the remaining numbers.
+      // We start from the end of the array and work to the front.
+      int toSwap = rand.nextInt(i);
       int placeHolder = returnArray[toSwap];
-      returnArray[toSwap] = returnArray[i];
-      returnArray[i] = placeHolder;
+      returnArray[toSwap] = returnArray[i - 1];
+      returnArray[i - 1] = placeHolder;
     }
 
     return returnArray;
