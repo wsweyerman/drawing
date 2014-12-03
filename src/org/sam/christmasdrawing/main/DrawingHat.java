@@ -13,6 +13,7 @@ import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -49,12 +50,15 @@ public class DrawingHat {
   private final LinkedHashMap<String, Person> familyMap;
   private final Person[] family;
   private RandomPerm permuter;
+  private final boolean pairs;
 
-  public DrawingHat(RandomPerm permuter, BufferedReader inFile, List<BufferedReader> prevFiles) throws IOException {
+  public DrawingHat(RandomPerm permuter, BufferedReader inFile, List<BufferedReader> prevFiles,
+      boolean pairs) throws IOException {
     this.permuter = permuter;
     familyMap = readFamilyMap(inFile);
     updateAllowance(prevFiles);
     family = familyMap.values().toArray(new Person[familyMap.size()]);
+    this.pairs = pairs;
   }
 
   private void updateAllowance(List<BufferedReader> prevFiles) throws IOException {
@@ -101,7 +105,7 @@ public class DrawingHat {
     for (int i = 0; i < n; i++) {
       // don't allow someone to draw their own name, the name of someone who is
       // disallowed or have a cycle of length two
-      if (i == perm[perm[i]]) {
+      if (i == perm[i] || (!pairs && i == perm[perm[i]])) {
         System.out.println("Not allowing circular (" + i + "," + perm[i] + "): " 
             + family[i] + " <-> " + family[perm[i]]);
         return false;
@@ -149,6 +153,7 @@ public class DrawingHat {
   private static final String INPUT_ARG = "input";
   private static final String OUTPUT_ARG = "output";
   private static final String PREV_ARG = "prev";
+  private static final String TWO_CYCLE_ARG = "pairs";
   @SuppressWarnings("static-access")
   private static Options buildCli() {
     Options cli = new Options();
@@ -173,6 +178,8 @@ public class DrawingHat {
         .hasArgs()
         .withDescription("Previous output files to read as disallowed pairings.")
         .create());
+    cli.addOption(new Option(TWO_CYCLE_ARG, "Allow pairs (cycle of length two)."));
+
     return cli;
   }
 
@@ -201,7 +208,8 @@ public class DrawingHat {
           prevFiles.add(new BufferedReader(new FileReader(prevFileName)));
         }
       }
-      DrawingHat drawingHat = new DrawingHat(new RandomPerm(new Random()), inFile, prevFiles);
+      DrawingHat drawingHat = new DrawingHat(new RandomPerm(new Random()), inFile, prevFiles,
+          line.hasOption(TWO_CYCLE_ARG));
       List<Integer> drawing = drawingHat.getDrawing();
  
       outFile = new FileWriter(outFileName);
